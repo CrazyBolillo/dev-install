@@ -1,0 +1,26 @@
+#!/bin/bash
+
+DOWNLOAD_PATH=/tmp/apache-maven-3.8.6-bin.tar.gz
+INSTALL_DIR=/opt/apache-maven-3.8.6
+
+echo "Starting install for Apache Maven 3.8.6"
+
+# Download
+echo "Downloading Apache Maven 3.8.6"
+wget https://dlcdn.apache.org/maven/maven-3/3.8.6/binaries/apache-maven-3.8.6-bin.tar.gz -O $DOWNLOAD_PATH
+echo "Uncompressing into $INSTALL_DIR"
+
+# Uncompress into site
+sudo rm -drf $INSTALL_DIR
+sudo mkdir $INSTALL_DIR
+sudo tar -xf $DOWNLOAD_PATH -C $INSTALL_DIR --strip-components=1
+
+# Add to $PATH
+echo "Adding to PATH. Modifying .bashrc"
+echo "export PATH=$INSTALL_DIR/bin:\$PATH" >> ~/.bashrc
+
+# Run program
+# shellcheck source=/dev/null
+. ~/.bashrc
+echo ">> mvn --version"
+mvn --version
