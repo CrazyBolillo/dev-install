@@ -1,0 +1,60 @@
+#!/bin/bash
+# ---------
+# Generic script to install programs which follow the following installation progress:
+# 1. Download compressed file to temporary location
+# 2. Decompress on installation path
+# 3. Add binaries to $PATH
+#
+# The following variables need to be set before calling this file:
+# * APP_NAME - The name for the program to be installed. Used for UI purposes
+# * APP_LINK - URL to download the application
+# * DOWNLOAD_PATH - Path where the compressed file will be saved
+# * INSTALL_DIR - Directory where the file will be decompressed
+# * BIN_FOLDER - Relative path (with the root being INSTALL_dIR) where binaries are found. This will be added to $PATH
+#   Defaults to bin
+# * TEST_CMD - Command that will be run at the end of installation to verify the program's functioning
+# * SUDO - Run decompression step with sudo. Defaults to true
+# ---------
+
+if [ -z "$BIN_FOLDER" ];
+then
+  BIN_FOLDER=bin
+fi
+
+if [ -z "$SUDO" ];
+then
+  SUDO=true
+fi
+
+if [ "$SUDO" = true ];
+then
+  SUDO_CMD=sudo
+else
+  SUDO_CMD=
+fi
+
+echo "Starting install for $APP_NAME"
+
+# Download
+echo "Downloading $APP_NAME"
+if ! wget "$APP_LINK" -O "$DOWNLOAD_PATH";
+then
+  echo "FATAL error during download. Aborting."
+  return 126
+fi
+
+# Decompressing into site
+echo "Decompressing $APP_NAME into $INSTALL_DIR"
+$SUDO_CMD rm -drf "$INSTALL_DIR"
+$SUDO_CMD mkdir "$INSTALL_DIR"
+$SUDO_CMD tar -xf "$DOWNLOAD_PATH" -C "$INSTALL_DIR" --strip-components=1
+
+# Add to $PATH
+echo "Adding to PATH. Modifying .bashrc"
+echo "export PATH=$INSTALL_DIR/$BIN_FOLDER:\$PATH" >> ~/.bashrc
+
+# Run program
+# shellcheck source=/dev/null
+. ~/.bashrc
+echo ">> $TEST_CMD"
+$TEST_CMD
