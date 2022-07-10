@@ -1,0 +1,10 @@
+#!/bin/bash
+
+APP_NAME="GraalVM CE 22.1.0"
+APP_LINK="https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.1.0/graalvm-ce-java11-linux-amd64-22.1.0.tar.gz"
+DOWNLOAD_PATH="/tmp/graalvm-ce-java11-linux-amd64-22.1.0.tar.gz"
+INSTALL_DIR="/opt/graalvm-ce-java11-linux-amd64-22.1.0"
+TEST_CMD="java --version"
+
+. ./decomp_install
+echo "export JAVA_HOME=$INSTALL_DIR" >> ~/.bashrc
