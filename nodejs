@@ -1,0 +1,9 @@
+#!/bin/bash
+
+APP_NAME="Node.js 16.16.0"
+APP_LINK="https://nodejs.org/dist/v16.16.0/node-v16.16.0-linux-x64.tar.xz"
+DOWNLOAD_PATH="/tmp/node-v16.16.0-linux-x64.tar.xz"
+INSTALL_DIR="/opt/node-v16.16.0-linux-x64.tar.xz"
+TEST_CMD="node --version"
+
+. ./decomp_install
